@@ -42,9 +42,20 @@ const Settings = () => {
         <DaoMetaOverview />
       </Box>
       <Box w={['100%', null, null, null, '50%']}>
-        <TextBox size='xs'>Boost Status</TextBox>
-        <BoostStatus />
-        <TextBox size='xs'>Superpowers</TextBox>
+        <Flex justify='space-between' mt={6}>
+          <TextBox size='xs'>Superpowers</TextBox>
+          <Link
+            as={RouterLink}
+            color='secondary.500'
+            fontFamily='heading'
+            fontSize='xs'
+            textTransform='uppercase'
+            letterSpacing='0.15em'
+            to={`/dao/${dao.address}/settings/boosts`}
+          >
+            Explore Apps
+          </Link>
+        </Flex>
         <Superpowers />
         {dao?.graphData && dao.graphData.minions.length > 0 && (
           <>
@@ -52,6 +63,8 @@ const Settings = () => {
             <Minions />
           </>
         )}
+        <TextBox size='xs'>Boost Status</TextBox>
+        <BoostStatus />
       </Box>
     </Flex>
   );

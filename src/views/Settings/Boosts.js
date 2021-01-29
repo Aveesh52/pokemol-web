@@ -1,17 +1,21 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
 import { Box, Flex, Button } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import ContentBox from '../../components/Shared/ContentBox';
 import TextBox from '../../components/Shared/TextBox';
 import GenericModal from '../../components/Modal/GenericModal';
-import { useDao, useModals } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useMemberWallet,
+  useModals,
+} from '../../contexts/PokemolContext';
 import { boostList } from '../../content/boost-content';
 import BoostLaunchWrapper from '../../components/Settings/BoostLaunchWrapper';
 
 const Boosts = () => {
   const [dao] = useDao();
+  const [memberWallet] = useMemberWallet();
   const { modals, openModal } = useModals();
 
   const renderBoostCard = (boost, i) => {
@@ -51,25 +55,32 @@ const Boosts = () => {
           </Button>
         ) : (
           <>
-            {hasBoost ? (
-              <Button
-                as={RouterLink}
-                to={`/dao/${dao.address}/settings`}
-                textTransform='uppercase'
-              >
-                Settings
-              </Button>
-            ) : (
-              <Button
-                textTransform='uppercase'
-                onClick={() => openModal(boost.modalName)}
-              >
-                Add This App
-              </Button>
-            )}
+            {memberWallet?.shares > 0 ? (
+              <>
+                {hasBoost ? (
+                  <Button
+                    as={RouterLink}
+                    to={`/dao/${dao.address}/settings`}
+                    textTransform='uppercase'
+                  >
+                    Settings
+                  </Button>
+                ) : (
+                  <Button
+                    textTransform='uppercase'
+                    onClick={() => openModal(boost.modalName)}
+                  >
+                    Add This App
+                  </Button>
+                )}
+              </>
+            ) : null}
           </>
         )}
-        <GenericModal isOpen={modals[boost.modalName]}>
+        <GenericModal
+          isOpen={modals[boost.modalName]}
+          closeOnOverlayClick={false}
+        >
           <>
             {!boost.comingSoon ? (
               <>
